@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowDown, ArrowUpRight, Box, Flame, X } from 'lucide-react';
 
+const getVideoPoster = (url: string) =>
+  url
+    .replace(/-web\.mp4(\?.*)?$/i, '.webp')
+    .replace(/\.mp4(\?.*)?$/i, '.webp');
+
 interface ProjectDetailProps {
   project: any;
   projects: any[];
@@ -232,10 +237,13 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, projects, onSele
                         >
                           <video 
                             src={project.videos[activeVideo].url} 
+                            poster={getVideoPoster(project.videos[activeVideo].url)}
                             controls={false}
                             autoPlay 
                             muted 
                             loop 
+                            playsInline
+                            preload="metadata"
                             className="w-full h-full object-cover" 
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />

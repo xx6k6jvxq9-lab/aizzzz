@@ -94,7 +94,7 @@ const PROJECTS = [
       },
       {
         title: '星途 / 训练、任务与成长闭环',
-        image: '/S1_small.webp',
+        image: '/S1.webp',
         imageStack: ['/w1.webp', '/w2.webp'],
         gameplayTitle: '成长感不是奖励，而是被持续感知的推进',
         techTitle: '成长闭环依赖统一状态，而不是分散页面',
@@ -202,6 +202,11 @@ const PROJECTS = [
     images: []
   }
 ];
+
+const getVideoPoster = (url: string) =>
+  url
+    .replace(/-web\.mp4(\?.*)?$/i, '.webp')
+    .replace(/\.mp4(\?.*)?$/i, '.webp');
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -1259,6 +1264,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                             <>
                               <video 
                                 src={(project as any).videos[activeVideo].url} 
+                                poster={getVideoPoster((project as any).videos[activeVideo].url)}
                                 controls
                                 autoPlay={shouldAutoplayArchive}
                                 muted 
@@ -1500,6 +1506,9 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                   <img
                                     src={imageSrc}
                                     alt={`核心玩法 ${imageIndex + 1}`}
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchPriority={imageIndex === 0 ? 'high' : 'auto'}
                                     className="block w-full h-auto hover:scale-[1.02] transition-all duration-1000"
                                     referrerPolicy="no-referrer"
                                   />
@@ -1515,6 +1524,9 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                               <img 
                                 src={(project as any).features[activeFeature].image} 
                                 alt="核心玩法"
+                                loading="eager"
+                                decoding="async"
+                                fetchPriority="high"
                                 className={`w-full h-full ${(((project as any).features[activeFeature].image || '').startsWith('/m') || (project as any).features[activeFeature].image === '/l1.webp') ? 'object-contain' : 'object-cover'} hover:scale-105 transition-all duration-1000`} 
                                 referrerPolicy="no-referrer"
                               />
@@ -1538,6 +1550,9 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                   <img
                                     src={imageSrc}
                                     alt={`技术架构 ${imageIndex + 1}`}
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchPriority={imageIndex === 0 ? 'high' : 'auto'}
                                     className="block w-full h-auto hover:scale-[1.02] transition-all duration-1000"
                                     referrerPolicy="no-referrer"
                                   />
@@ -1554,6 +1569,9 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                 <img
                                   src={(project as any).features[activeFeature].techImages[0]}
                                   alt="技术架构"
+                                  loading="eager"
+                                  decoding="async"
+                                  fetchPriority="high"
                                   className="w-full h-full object-cover hover:scale-105 transition-all duration-1000"
                                   referrerPolicy="no-referrer"
                                 />
@@ -1566,6 +1584,8 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                 <img
                                   src={(project as any).features[activeFeature].techImages[1]}
                                   alt="技术架构补充"
+                                  loading="eager"
+                                  decoding="async"
                                   className="w-full h-full object-cover hover:scale-105 transition-all duration-1000"
                                   referrerPolicy="no-referrer"
                                 />
@@ -1580,6 +1600,9 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                               <img 
                                 src={(project as any).features[activeFeature].techImage} 
                                 alt="技术架构"
+                                loading="eager"
+                                decoding="async"
+                                fetchPriority="high"
                                 className={`w-full h-full ${(project as any).features[activeFeature].techImage.startsWith('/m') ? 'object-contain' : 'object-cover'} hover:scale-105 transition-all duration-1000`} 
                                 referrerPolicy="no-referrer"
                               />
@@ -1647,12 +1670,15 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                     className="w-full bg-transparent overflow-hidden"
                                     onClick={() => setSelectedFeatureImage({ src: (project as any).features[activeFeature].designImage || `https://picsum.photos/seed/stardeam-design-${activeFeature}/1600/900`, alt: '设计哲学' })}
                                   >
-                                    <img
-                                      src={(project as any).features[activeFeature].designImage || `https://picsum.photos/seed/stardeam-design-${activeFeature}/1600/900`}
-                                      alt="设计哲学"
-                                      className="block w-full h-auto hover:scale-[1.02] transition-all duration-1000"
-                                      referrerPolicy="no-referrer"
-                                    />
+                                      <img
+                                        src={(project as any).features[activeFeature].designImage || `https://picsum.photos/seed/stardeam-design-${activeFeature}/1600/900`}
+                                        alt="设计哲学"
+                                        loading="eager"
+                                        decoding="async"
+                                        fetchPriority="high"
+                                        className="block w-full h-auto hover:scale-[1.02] transition-all duration-1000"
+                                        referrerPolicy="no-referrer"
+                                      />
                                   </button>
                                   <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-full">
                                     {((project as any).features[activeFeature].designImageGrid as string[]).map((imageSrc, imageIndex) => (
@@ -1665,6 +1691,8 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                         <img
                                           src={imageSrc}
                                           alt={`设计细节 ${imageIndex + 1}`}
+                                          loading="eager"
+                                          decoding="async"
                                           className="block w-full h-auto hover:scale-[1.02] transition-all duration-1000"
                                           referrerPolicy="no-referrer"
                                         />
@@ -1684,6 +1712,8 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                       <img
                                         src={imageSrc}
                                         alt={`设计哲学 ${imageIndex + 1}`}
+                                        loading="eager"
+                                        decoding="async"
                                         className="block w-full h-auto hover:scale-[1.02] transition-all duration-1000"
                                         referrerPolicy="no-referrer"
                                       />
@@ -1699,6 +1729,9 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                   <img 
                                     src={(project as any).features[activeFeature].designImage || `https://picsum.photos/seed/stardeam-design-${activeFeature}/1600/900`} 
                                     alt="设计哲学"
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchPriority="high"
                                     className={`w-full h-full ${((project as any).features[activeFeature].designImage || '').startsWith('/m') ? 'object-contain' : 'object-cover'} hover:scale-105 transition-all duration-1000`} 
                                     referrerPolicy="no-referrer"
                                   />
@@ -1749,6 +1782,9 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                             layout
                             src={feat.image} 
                             alt={feat.title} 
+                            loading="eager"
+                            decoding="async"
+                            fetchPriority="high"
                             className={`shrink-0 w-[285px] md:w-[320px] aspect-[430/910] bg-black object-cover drop-shadow-2xl rounded-[2rem] border-[4px] border-gray-900 transition-transform duration-500 ${feat.title === 'Bloom界面' ? 'scale-[1.02]' : ''} ${!isExpanded ? 'group-hover:scale-[1.04]' : ''}`} 
                             referrerPolicy="no-referrer" 
                           />
@@ -1763,6 +1799,8 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                 transition={{ duration: 0.5, delay: i * 0.05, ease: "easeOut" }}
                                 src={img} 
                                 alt={`${feat.title} ${i}`} 
+                                loading="eager"
+                                decoding="async"
                                 className="shrink-0 w-[285px] md:w-[320px] aspect-[430/910] object-cover drop-shadow-2xl rounded-[2rem] border-[4px] border-gray-900" 
                                 referrerPolicy="no-referrer" 
                               />
