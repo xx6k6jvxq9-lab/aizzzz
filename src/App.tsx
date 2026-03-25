@@ -1273,7 +1273,6 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                   poster={getVideoPoster((project as any).videos[activeVideo].url)}
                                   controls
                                   autoPlay
-                                  muted 
                                   loop 
                                   playsInline
                                   preload="metadata"
