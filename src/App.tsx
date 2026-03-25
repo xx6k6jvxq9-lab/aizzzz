@@ -1,6 +1,6 @@
 ﻿import { motion, AnimatePresence, useMotionValue, useSpring } from 'motion/react';
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowDown, ArrowUpRight, PenTool, Code2, Blocks, Sparkles, Box, Bot, Type, Layers, Flame, TrendingUp, Users, X, Search, Phone } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, PenTool, Code2, Blocks, Sparkles, Box, Bot, Type, Layers, Flame, TrendingUp, Users, X, Search, Phone, Play } from 'lucide-react';
 
 // --- Data ---
 const PROJECTS = [
@@ -18,7 +18,7 @@ const PROJECTS = [
     tech: ['Design', 'Code', 'AI'],
     description: '或许，我也可以成为一个创作者，把我脑子里天马行空的想法一一实现',
     videos: [
-      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: 'https://github.com/xx6k6jvxq9-lab/aizzzz/releases/download/media-v1/c1-web.mp4', platform: 'GitHub', views: '120万播放' },
+      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: '/c1-web.mp4', platform: 'Local', views: '120万播放' },
       { title: '美丽新世界', titleEn: 'Brave New World', url: '/c2-web.mp4', platform: 'Local', views: '85万播放' },
       { title: '玻璃山', titleEn: 'Glass Mountain', url: '/c3-web.mp4', platform: 'Local', views: '42万播放' },
       { title: '一觉醒来全球降智', titleEn: 'Global IQ Drop Overnight', url: '/c4-web.mp4', platform: 'Local', views: '210万播放' }
@@ -1209,7 +1209,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                       onClick={() => {
                         onContentClick();
                         setActiveVideo(idx);
-                        setShouldAutoplayArchive(true);
+                        setShouldAutoplayArchive(false);
                       }}
                       onMouseEnter={() => setCursorVariant("contentHover")}
                       onMouseLeave={() => setCursorVariant("default")}
@@ -1267,17 +1267,46 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                         >
                           {/\.((mp4)|(webm)|(ogg)|(mov))(\?.*)?$/i.test((project as any).videos[activeVideo].url) ? (
                             <>
-                              <video 
-                                src={(project as any).videos[activeVideo].url} 
-                                poster={getVideoPoster((project as any).videos[activeVideo].url)}
-                                controls
-                                autoPlay={shouldAutoplayArchive}
-                                muted 
-                                loop 
-                                playsInline
-                                preload="metadata"
-                                className="w-full h-full object-cover" 
-                              />
+                              {shouldAutoplayArchive ? (
+                                <video 
+                                  src={(project as any).videos[activeVideo].url} 
+                                  poster={getVideoPoster((project as any).videos[activeVideo].url)}
+                                  controls
+                                  autoPlay
+                                  muted 
+                                  loop 
+                                  playsInline
+                                  preload="metadata"
+                                  className="w-full h-full object-cover" 
+                                />
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => setShouldAutoplayArchive(true)}
+                                  className="group absolute inset-0 overflow-hidden"
+                                >
+                                  <img
+                                    src={getVideoPoster((project as any).videos[activeVideo].url)}
+                                    alt={(project as any).videos[activeVideo].title}
+                                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchPriority="high"
+                                  />
+                                  <div className="absolute inset-0 bg-[linear-gradient(to_top,_rgba(0,0,0,0.6),_rgba(0,0,0,0.12)_42%,_rgba(0,0,0,0.22))]" />
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="flex items-center gap-4 rounded-full border border-white/20 bg-black/45 px-6 py-4 text-white shadow-[0_20px_40px_rgba(0,0,0,0.28)] backdrop-blur-md transition-all duration-500 group-hover:bg-black/55">
+                                      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-black">
+                                        <Play size={18} className="ml-0.5" fill="currentColor" />
+                                      </span>
+                                      <span className="text-left">
+                                        <span className="block font-mono text-[10px] uppercase tracking-[0.32em] text-white/65">Archive Preview</span>
+                                        <span className="block text-sm md:text-base font-light">点击播放视频</span>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </button>
+                              )}
                             </>
                           ) : (
                             <a

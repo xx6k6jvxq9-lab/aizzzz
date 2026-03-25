@@ -9,6 +9,10 @@ const targets = fs
   .filter((file) => file.endsWith('.webp'))
   .sort();
 
+const overrides = {
+  '44.webp': { maxWidth: 810, quality: 78 },
+};
+
 const getProfile = ({ width = 0, height = 0 }) => {
   const isPortrait = height > width * 1.35;
   const isWide = width > height * 1.35;
@@ -33,7 +37,7 @@ for (const file of targets) {
   const fullPath = path.join(publicDir, file);
   const inputBuffer = fs.readFileSync(fullPath);
   const metadata = await sharp(inputBuffer).metadata();
-  const { maxWidth, quality } = getProfile(metadata);
+  const { maxWidth, quality } = overrides[file] ?? getProfile(metadata);
 
   const pipeline = sharp(inputBuffer, { failOn: 'none' }).rotate();
 
