@@ -18,10 +18,10 @@ const PROJECTS = [
     tech: ['Design', 'Code', 'AI'],
     description: '或许，我也可以成为一个创作者，把我脑子里天马行空的想法一一实现',
     videos: [
-      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: 'https://res.cloudinary.com/dy7hg4lcg/video/upload/v1774361230/c1_alr9ab.mp4', platform: 'Cloudinary', views: '120万播放' },
-      { title: '美丽新世界', titleEn: 'Brave New World', url: '/c2-web.mp4', platform: 'Local', views: '85万播放' },
-      { title: '玻璃山', titleEn: 'Glass Mountain', url: '/c3-web.mp4', platform: 'Local', views: '42万播放' },
-      { title: '一觉醒来全球降智', titleEn: 'Global IQ Drop Overnight', url: '/c4-web.mp4', platform: 'Local', views: '210万播放' }
+      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: 'https://res.cloudinary.com/dy7hg4lcg/video/upload/v1774361230/c1_alr9ab.mp4', poster: '/c1-poster.webp', platform: 'Cloudinary', views: '120万播放' },
+      { title: '美丽新世界', titleEn: 'Brave New World', url: '/c2-web.mp4', poster: '/c2-poster.webp', platform: 'Local', views: '85万播放' },
+      { title: '玻璃山', titleEn: 'Glass Mountain', url: '/c3-web.mp4', poster: '/c3-poster.webp', platform: 'Local', views: '42万播放' },
+      { title: '一觉醒来全球降智', titleEn: 'Global IQ Drop Overnight', url: '/c4-web.mp4', poster: '/c4-poster.webp', platform: 'Local', views: '210万播放' }
     ],
     characters: [
       { name: '江烬', role: '深情霸总', image: '/jz.webp', heatValue: 82000, heatDisplay: '8.2w', desc: '冷峻外表下藏着极致的深情。', intro: '作为跨国集团的掌舵人，江烬习惯了掌控一切。但在冷峻不近人情的外表下，隐藏着对唯一光芒的偏执与深情。', platforms: [{ name: '热度值', heat: '8.2w' }] },
@@ -205,8 +205,9 @@ const PROJECTS = [
   }
 ];
 
-const getVideoPoster = (url: string) =>
-  url
+const getVideoPoster = (video: { url: string; poster?: string }) =>
+  video.poster ||
+  video.url
     .replace(/-web\.mp4(\?.*)?$/i, '.webp')
     .replace(/\.mp4(\?.*)?$/i, '.webp');
 
@@ -1270,7 +1271,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                               {shouldAutoplayArchive ? (
                                 <video 
                                   src={(project as any).videos[activeVideo].url} 
-                                  poster={getVideoPoster((project as any).videos[activeVideo].url)}
+                                  poster={getVideoPoster((project as any).videos[activeVideo])}
                                   controls
                                   autoPlay
                                   loop 
@@ -1285,7 +1286,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                   className="group absolute inset-0 overflow-hidden"
                                 >
                                   <img
-                                    src={getVideoPoster((project as any).videos[activeVideo].url)}
+                                    src={getVideoPoster((project as any).videos[activeVideo])}
                                     alt={(project as any).videos[activeVideo].title}
                                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                                     loading="eager"
