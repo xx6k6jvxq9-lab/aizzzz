@@ -809,18 +809,20 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10 border-t border-black/10 pt-14">
             <div>
-              <p className="text-xl md:text-2xl text-gray-800 font-light max-w-3xl leading-snug font-serif italic mb-2">
-                {project.subtitle}
-              </p>
+              <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-2">
+                <p className="text-xl md:text-2xl text-gray-800 font-light max-w-3xl leading-snug font-serif italic">
+                  {project.subtitle}
+                </p>
+                {project.id === 'StarDeam' && (
+                  <span className="inline-flex items-center rounded-full border border-black/15 bg-white/85 px-4 py-1.5 font-mono text-[11px] md:text-xs font-semibold tracking-[0.22em] text-black shadow-[0_10px_30px_rgba(0,0,0,0.08)] backdrop-blur-md">
+                    内测用户 100+
+                  </span>
+                )}
+              </div>
               <div className="flex flex-wrap items-center gap-3 md:gap-4">
                 <p className="text-base md:text-lg text-gray-500 font-light leading-snug font-serif italic">
                   {project.subtitleZh}
                 </p>
-                {project.id === 'StarDeam' && (
-                  <span className="rounded-full border border-black/10 bg-white/35 px-3 py-1 font-mono text-[11px] tracking-[0.18em] text-gray-500">
-                    内测用户100+
-                  </span>
-                )}
               </div>
             </div>
             <div className="flex items-center gap-4 text-gray-400 pb-2">
