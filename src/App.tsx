@@ -38,6 +38,7 @@ const PROJECTS = [
     titleZh: '星梦之路',
     subtitle: 'AI Entertainment Interactive Game',
     subtitleZh: 'AI 娱乐圈互动文字游戏',
+    betaUsers: '内测用户 100+',
     cover: '/S1.webp',
     role: '产品负责人',
     year: '2024',
@@ -146,6 +147,7 @@ const PROJECTS = [
     titleZh: '绽放',
     subtitle: 'Digital Companion Terminal',
     subtitleZh: '数字伴侣终端',
+    betaUsers: '内测用户 300+',
     cover: '/33.webp',
     role: '产品负责人',
     year: '2026',
@@ -813,9 +815,10 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                 <p className="text-xl md:text-2xl text-gray-800 font-light max-w-3xl leading-snug font-serif italic">
                   {project.subtitle}
                 </p>
-                {project.id === 'StarDeam' && (
-                  <span className="inline-flex items-center rounded-full border border-black/15 bg-white/85 px-4 py-1.5 font-mono text-[11px] md:text-xs font-semibold tracking-[0.22em] text-black shadow-[0_10px_30px_rgba(0,0,0,0.08)] backdrop-blur-md">
-                    内测用户 100+
+                {(project as any).betaUsers && (
+                  <span className="inline-flex items-center rounded-full border border-black/10 bg-white/70 px-3.5 py-1 text-[12px] md:text-[13px] text-gray-700 shadow-[0_8px_24px_rgba(0,0,0,0.05)] backdrop-blur-sm">
+                    <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-black/55" />
+                    {(project as any).betaUsers}
                   </span>
                 )}
               </div>
