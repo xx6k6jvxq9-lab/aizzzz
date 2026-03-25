@@ -18,7 +18,7 @@ const PROJECTS = [
     tech: ['Design', 'Code', 'AI'],
     description: '或许，我也可以成为一个创作者，把我脑子里天马行空的想法一一实现',
     videos: [
-      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: 'https://res.cloudinary.com/dy7hg4lcg/video/upload/v1774446679/c1-web_szt3bd.mp4', platform: 'Cloudinary', views: '120万播放' },
+      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: '/c1-web.mp4', platform: 'Local', views: '120万播放' },
       { title: '美丽新世界', titleEn: 'Brave New World', url: '/c2-web.mp4', platform: 'Local', views: '85万播放' },
       { title: '玻璃山', titleEn: 'Glass Mountain', url: '/c3-web.mp4', platform: 'Local', views: '42万播放' },
       { title: '一觉醒来全球降智', titleEn: 'Global IQ Drop Overnight', url: '/c4-web.mp4', platform: 'Local', views: '210万播放' }
@@ -716,7 +716,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
   const [expandedGalleryIdx, setExpandedGalleryIdx] = useState<number | null>(null);
   const directoryRef = useRef<HTMLDivElement>(null);
   const currentIndex = PROJECTS.findIndex(p => p.id === project.id);
-  const nextProject = PROJECTS[(currentIndex + 1) % PROJECTS.length];
+  const nextProject = { id: 'about', title: '关于我', titleEn: 'About' };
 
   useEffect(() => {
     if (directoryRef.current) {
@@ -2067,6 +2067,9 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
             <h2 className="text-5xl md:text-7xl font-serif italic text-black group-hover:opacity-60 transition-opacity">
               {nextProject.title}
             </h2>
+            <p className="mt-3 text-sm md:text-base text-gray-400 font-mono uppercase tracking-[0.3em]">
+              {nextProject.titleEn}
+            </p>
             <div className="h-[1px] w-0 bg-black group-hover:w-full transition-all duration-500 mt-4 mx-auto"></div>
           </button>
         </div>
