@@ -8,3 +8,4 @@ coverage/
 !.env.example
 video-source/
 .git_lfs_repo/
+tools/
