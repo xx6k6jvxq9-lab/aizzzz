@@ -18,7 +18,7 @@ const PROJECTS = [
     tech: ['Design', 'Code', 'AI'],
     description: '或许，我也可以成为一个创作者，把我脑子里天马行空的想法一一实现',
     videos: [
-      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: '/c1-web.mp4', platform: 'Local', views: '120万播放' },
+      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: '/c1-web.mp4', embedUrl: 'https://player.cloudinary.com/embed/?cloud_name=dy7hg4lcg&public_id=c1_alr9ab', platform: 'Cloudinary', views: '120万播放' },
       { title: '美丽新世界', titleEn: 'Brave New World', url: '/c2-web.mp4', platform: 'Local', views: '85万播放' },
       { title: '玻璃山', titleEn: 'Glass Mountain', url: '/c3-web.mp4', platform: 'Local', views: '42万播放' },
       { title: '一觉醒来全球降智', titleEn: 'Global IQ Drop Overnight', url: '/c4-web.mp4', platform: 'Local', views: '210万播放' }
@@ -1265,7 +1265,15 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                           className="absolute inset-0"
                         >
-                          {/\.((mp4)|(webm)|(ogg)|(mov))(\?.*)?$/i.test((project as any).videos[activeVideo].url) ? (
+                          {(project as any).videos[activeVideo].embedUrl ? (
+                            <iframe
+                              src={(project as any).videos[activeVideo].embedUrl}
+                              title={(project as any).videos[activeVideo].title}
+                              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                              allowFullScreen
+                              className="h-full w-full border-0"
+                            />
+                          ) : /\.((mp4)|(webm)|(ogg)|(mov))(\?.*)?$/i.test((project as any).videos[activeVideo].url) ? (
                             <>
                               {shouldAutoplayArchive ? (
                                 <video 
