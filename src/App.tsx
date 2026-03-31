@@ -147,7 +147,7 @@ const PROJECTS = [
     titleZh: '绽放',
     subtitle: 'Digital Companion Terminal',
     subtitleZh: '数字伴侣终端',
-    betaUsers: '内测用户 300+',
+    betaUsers: '内测用户 500+',
     cover: '/33.webp',
     role: '产品负责人',
     year: '2026',
