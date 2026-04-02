@@ -470,10 +470,14 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, projects, onSele
                       <div className="absolute top-0 inset-x-0 h-6 flex justify-center z-10">
                         <div className="w-32 h-6 bg-black rounded-b-3xl"></div>
                       </div>
-
+                      <div className="w-full h-full rounded-[2.5rem] overflow-hidden bg-gray-100 relative">
+                        <img src={feat.image} alt={feat.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      </div>
                     </div>
                   ) : (
-
+                    <div className="rounded-[2rem] overflow-hidden bg-gray-100 aspect-[4/3] shadow-sm w-full">
+                      <img src={feat.image} alt={feat.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    </div>
                   )}
                 </motion.div>
                 

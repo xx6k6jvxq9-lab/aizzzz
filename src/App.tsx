@@ -1,6 +1,24 @@
-﻿import { motion, AnimatePresence, useMotionValue, useSpring } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'motion/react';
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowDown, ArrowUpRight, PenTool, Code2, Blocks, Sparkles, Box, Bot, Type, Layers, Flame, TrendingUp, Users, X, Search, Phone, Play } from 'lucide-react';
+
+type CursorVariant = 'default' | 'hover' | 'contentHover';
+type CursorSetter = React.Dispatch<React.SetStateAction<CursorVariant>>;
+type HeatPlatform = { name: string; heat: string };
+type CharacterData = {
+  name: string;
+  role: string;
+  image: string;
+  heatValue: number;
+  heatDisplay: string;
+  desc: string;
+  intro: string;
+  platforms: HeatPlatform[];
+};
+type OrbitStyle = React.CSSProperties & {
+  '--orbit-duration': string;
+  '--orbit-tilt'?: string;
+};
 
 // --- Data ---
 const PROJECTS = [
@@ -165,8 +183,8 @@ const PROJECTS = [
           '/b3.webp',
           '/b4.webp'
         ],
-        tech: '极致拟物化的手机系统体验。你可以自由排列桌面图标、放置功能组件，在数字世界中复制一个完全属于你的自定义界面。',
-        gameplay: 'Bloom 的第一层体验不是功能导航，而是更贴近日常的进入方式。桌面、顶栏、Dock、图标与组件共同构成其整体结构，使产品不再以“任务列表”的逻辑展开，而是从“生活入口”自然延伸。'
+        tech: '极致拟物的手机系统体验。你可以自由排列桌面图标、放置功能组件，通过全局 CSS 与个性化配置，在数字世界中复刻一部完全属于你的 AI 手机。',
+        gameplay: 'Bloom 的第一层体验不是功能导航，而是一部完整的手机。桌面、顶栏、Dock、图标与小组件共同构成沉浸式设备感，让产品从"任务列表"变成"生活入口"。'
       },
       {
         title: '关系体验',
@@ -174,10 +192,16 @@ const PROJECTS = [
         gallery: [
           '/g2.webp?v=20260324-1755',
           '/g3.webp?v=20260324-1801',
-          '/g4.webp?v=20260324-1801'
+          '/g4.webp?v=20260401-0001'
         ],
-        tech: '关系之所以能在不同场景中成立，依赖的并不是单一 prompt，而是一套按任务拆分的提示词系统。聊天、动态、评论回复、约会与摘要整理各自拥有独立的 prompt builder，使角色既能保持统一的人设与语气，又能输出符合场景目标的内容。TA 的持续存在感，本质上正来自这套场景化提示词系统的协同。',
-        gameplay: 'Bloom 并不把关系理解为一次次单独发生的对话，而是把聊天、动态、约会与情侣空间组织成一条连续的体验链路。回应只是开始，持续出现、逐渐靠近与长期留存，才构成这部手机真正的情感结构。'
+        tech: [
+          '关系之所以能在不同场景中成立，依赖的不是单一 prompt，而是一套按任务拆分的场景化提示词系统。',
+          '聊天、动态、评论回复、约会与摘要整理各自拥有独立的 prompt builder，使角色既能保持统一的人设与语气，又能输出符合场景目标的内容。持续存在感，本质上正来自这套系统的协同。'
+        ],
+        gameplay: [
+          'Bloom 不把关系理解为一次次单独的对话，而是把聊天、动态、约会与情侣空间组织成一条连续的体验链路。',
+          '回应只是开始，持续出现、逐渐靠近与长期留存，才构成这部手机真正的情感结构。'
+        ]
       },
       {
         title: '生活化能力与完整度',
@@ -187,8 +211,14 @@ const PROJECTS = [
           '/h3.webp?v=20260324-1820',
           '/h4.webp?v=20260324-1820'
         ],
-        tech: '这些模块之所以不会显得像散落的页面，关键在于底层已经形成统一的运行时主链。AI 请求被收口到同一运行时层，不同任务通过独立 prompt builder 进入对应链路，聊天、动态、约会与持久化数据再共同回流到同一套产品状态中。于是，这里成立的不是“很多功能”，而是一台已经具备主链路、状态回写与多模块联动能力的手机型产品。',
-        gameplay: 'Bloom 的完整度并不只来自聊天与关系主链。音乐、钱包、论坛、监控、世界书、短信与游戏中心等模块虽然不是主卖点，却共同补足了这部手机的生活感与世界感。它们让设备不只承担关系推进的任务，也开始具备被停留、被切换、被探索与被反复返回的理由。'
+        tech: [
+          '这些模块之所以不会显得像散落的页面，关键在于底层已经形成统一的运行时主链。',
+          'AI 请求被收口到同一运行时层，不同任务通过独立 prompt builder 进入对应链路，聊天、动态、约会与持久化数据再共同回流到同一套产品状态中。于是，这里成立的不是“很多功能”，而是一台已经具备主链路、状态回写与多模块联动能力的手机型产品。'
+        ],
+        gameplay: [
+          'Bloom 的完整度并不只来自聊天与关系主链。音乐、钱包、论坛、监控、世界书、短信与游戏中心等模块虽然不是主卖点，却共同补足了这部手机的生活感与世界感。',
+          '它们让设备不只承担关系推进的任务，也开始具备被停留、被切换、被探索与被反复返回的理由。'
+        ]
       },
       {
         title: '记忆沉淀',
@@ -197,7 +227,7 @@ const PROJECTS = [
           '/j2.webp?v=20260324-1828',
           '/j3.webp?v=20260324-1828'
         ],
-        tech: '这里的记忆并非单一聊天记录，而是被组织为分层结构：会话层承接即时互动，摘要层沉淀关系信息，记录层保存关键内容，配置层保留偏好与痕迹。也因此，关系不会因一次退出而中断，而能在不同入口中持续被调用、回看与延续。',
+        tech: '这里的记忆并非一串聊天记录，而是被组织为分层结构：会话层承接即时互动，摘要层沉淀关系信息，记录层保存关键内容，配置层留存偏好与痕迹。也因此，关系不会因为一次退出而中断，而能在不同入口中持续被调用、回看与延续。',
         gameplay: 'Bloom 关注的并不只是互动发生的瞬间，而是关系如何被留住。约会后的记录、情侣空间中的内容、被收藏的片段与被反复回看的痕迹，共同构成了这部手机里最私密也最持久的一层体验。'
       }
     ],
@@ -211,10 +241,13 @@ const getVideoPoster = (video: { url: string; poster?: string }) =>
     .replace(/-web\.mp4(\?.*)?$/i, '.webp')
     .replace(/\.mp4(\?.*)?$/i, '.webp');
 
+const asParagraphs = (content: string | string[] | undefined) =>
+  Array.isArray(content) ? content : content ? [content] : [];
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isEntered, setIsEntered] = useState(false);
-  const [cursorVariant, setCursorVariant] = useState("default");
+  const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -250,23 +283,23 @@ export default function App() {
     default: {
       width: 32,
       height: 32,
-      backgroundColor: "rgba(255, 255, 255, 0.15)",
-      border: "1px solid rgba(26, 26, 26, 0.9)",
-      backdropFilter: "blur(4px)",
+      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+      border: '1px solid rgba(26, 26, 26, 0.9)',
+      backdropFilter: 'blur(4px)',
     },
     hover: {
       width: 80,
       height: 80,
-      backgroundColor: "rgba(255, 255, 255, 0.3)",
-      border: "1px solid rgba(26, 26, 26, 0.1)",
-      backdropFilter: "blur(8px)",
+      backgroundColor: 'rgba(255, 255, 255, 0.3)',
+      border: '1px solid rgba(26, 26, 26, 0.1)',
+      backdropFilter: 'blur(8px)',
     },
     contentHover: {
       width: 64,
       height: 64,
-      backgroundColor: "transparent",
-      border: "1px dashed rgba(26, 26, 26, 0.6)",
-      backdropFilter: "none",
+      backgroundColor: 'transparent',
+      border: '1px dashed rgba(26, 26, 26, 0.6)',
+      backdropFilter: 'none',
     }
   };
 
@@ -404,7 +437,7 @@ const OrbitingNumbers: React.FC = () => {
             style={{
               '--orbit-duration': `${orbit.duration}s`,
               '--orbit-tilt': `${orbit.tilt}deg`,
-            } as any}
+            } as OrbitStyle}
           >
             {Array.from({ length: orbit.count }).map((_, j) => {
               const angle = (j / orbit.count) * 360;
@@ -417,7 +450,7 @@ const OrbitingNumbers: React.FC = () => {
                   }}
                 >
                   <div className={`text-4xl md:text-7xl font-mono font-bold animate-counter-orbit ${orbit.color}`}
-                       style={{ '--orbit-duration': `${orbit.duration}s` } as any}>
+                       style={{ '--orbit-duration': `${orbit.duration}s` } as OrbitStyle}>
                     {Math.floor(Math.random() * 10)}
                   </div>
                 </div>
@@ -516,7 +549,7 @@ const LoginScreen: React.FC<{ onEnter: () => void }> = ({ onEnter }) => {
   );
 }
 
-const Navbar: React.FC<{ activeTab: string, setActiveTab: (id: string) => void, setCursorVariant: any }> = ({ activeTab, setActiveTab, setCursorVariant }) => {
+const Navbar: React.FC<{ activeTab: string, setActiveTab: (id: string) => void, setCursorVariant: CursorSetter }> = ({ activeTab, setActiveTab, setCursorVariant }) => {
   const tabs = [
     { id: 'overview', label: 'Overview', labelZh: '概述' },
     ...PROJECTS.map(p => ({ id: p.id, label: p.navTitle, labelZh: p.navTitleZh })),
@@ -562,7 +595,7 @@ const Navbar: React.FC<{ activeTab: string, setActiveTab: (id: string) => void, 
   );
 }
 
-const Overview: React.FC<{ onSelectProject: (id: string) => void, setCursorVariant: any, onContentClick: () => void }> = ({ onSelectProject, setCursorVariant, onContentClick }) => {
+const Overview: React.FC<{ onSelectProject: (id: string) => void, setCursorVariant: CursorSetter, onContentClick: () => void }> = ({ onSelectProject, setCursorVariant, onContentClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [zIndex, setZIndex] = useState(10);
   const [shuffleKey, setShuffleKey] = useState(0);
@@ -705,13 +738,13 @@ const Overview: React.FC<{ onSelectProject: (id: string) => void, setCursorVaria
 
 
 
-const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => void, setCursorVariant: any, onContentClick: () => void }> = ({ project, onSelectProject, setCursorVariant, onContentClick }) => {
-  const [selectedChar, setSelectedChar] = useState<any>(null);
+const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => void, setCursorVariant: CursorSetter, onContentClick: () => void }> = ({ project, onSelectProject, setCursorVariant, onContentClick }) => {
+  const [selectedChar, setSelectedChar] = useState<CharacterData | null>(null);
   const [activeVideo, setActiveVideo] = useState<number>(0);
   const [shouldAutoplayArchive, setShouldAutoplayArchive] = useState(false);
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
   const [selectedFeatureImage, setSelectedFeatureImage] = useState<{ src: string; alt: string } | null>(null);
-  const [unlockedChars, setUnlockedChars] = useState<any[]>([]);
+  const [unlockedChars, setUnlockedChars] = useState<CharacterData[]>([]);
   const [totalHeat, setTotalHeat] = useState(0);
   const [playerOffset, setPlayerOffset] = useState(0);
   const [expandedGalleryIdx, setExpandedGalleryIdx] = useState<number | null>(null);
@@ -743,7 +776,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
     return () => window.removeEventListener('keydown', handleEscape);
   }, []);
 
-  const handleFlipCard = (char: any) => {
+  const handleFlipCard = (char: CharacterData) => {
     if (unlockedChars.find(u => u.name === char.name)) {
       setSelectedChar(char);
       return;
@@ -794,7 +827,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
             onMouseEnter={() => setCursorVariant("hover")}
             onMouseLeave={() => setCursorVariant("default")}
           >
-            {project.title.split(' ').map((word, i, arr) => (
+            {project.title.split(' ').map((word: string, i: number, arr: string[]) => (
               <motion.span 
                 key={i} 
                 initial={{ x: i % 2 === 0 ? -50 : 50, opacity: 0 }}
@@ -931,7 +964,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                     className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-black text-white rounded-full font-medium overflow-hidden transition-all hover:scale-105 hover:shadow-xl"
                   >
                     <span className="relative z-10 flex items-center gap-2">
-                      {(project as any).linkText || '璁块棶椤圭洰'}
+                      {(project as any).linkText || '访问项目'}
                       <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </span>
                     <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-black opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -1049,12 +1082,12 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                       <p className="text-xl text-gray-600 font-light leading-relaxed mb-8">{char.desc}</p>
                       
                       <div className="mb-8">
-                        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400 mb-3">浜虹墿浠嬬粛 Character Introduction</p>
+                        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400 mb-3">人物介绍 Character Introduction</p>
                         <p className="text-base text-gray-700 font-sans font-light leading-relaxed">{char.intro}</p>
                       </div>
                       
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        {char.platforms.map((p: any, i: number) => (
+                        {char.platforms.map((p: HeatPlatform, i: number) => (
                           <div key={i}>
                             <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400 mb-2">{p.name}</p>
                             <p className="text-2xl font-serif italic">{p.heat}</p>
@@ -1517,10 +1550,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                             </h6>
                           )}
                           <div className="space-y-6">
-                            {(Array.isArray((project as any).features[activeFeature].gameplay)
-                              ? (project as any).features[activeFeature].gameplay
-                              : [(project as any).features[activeFeature].gameplay]
-                            ).map((paragraph: string, index: number) => (
+                            {asParagraphs((project as any).features[activeFeature].gameplay).map((paragraph: string, index: number) => (
                               <p key={index} className="text-lg md:text-xl text-gray-600 font-light leading-[2.05] tracking-wide">
                                 {paragraph}
                               </p>
@@ -1530,7 +1560,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                         <div className="md:col-span-7 md:-mr-10 lg:-mr-16">
                           {Array.isArray((project as any).features[activeFeature].imageStack) ? (
                             <div className="flex flex-col gap-2 md:gap-3">
-                              {((project as any).features[activeFeature].imageStack as string[]).map((imageSrc, imageIndex) => (
+                              {((project as any).features[activeFeature].imageStack as string[]).map((imageSrc: string, imageIndex: number) => (
                                 <button
                                   type="button"
                                   key={imageSrc}
@@ -1574,7 +1604,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                         <div className="md:col-span-7 md:order-1 order-2">
                           {Array.isArray((project as any).features[activeFeature].techImageStack) ? (
                             <div className={`flex flex-col ${project.id === 'StarDeam' && (project as any).features[activeFeature].title?.startsWith('星途') ? 'gap-5 md:gap-7' : 'gap-2 md:gap-3'}`}>
-                              {((project as any).features[activeFeature].techImageStack as string[]).map((imageSrc, imageIndex) => (
+                              {((project as any).features[activeFeature].techImageStack as string[]).map((imageSrc: string, imageIndex: number) => (
                                 <button
                                   type="button"
                                   key={imageSrc}
@@ -1660,10 +1690,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                             </h6>
                           )}
                           <div className="space-y-6">
-                            {(Array.isArray((project as any).features[activeFeature].tech)
-                              ? (project as any).features[activeFeature].tech
-                              : [(project as any).features[activeFeature].tech]
-                            ).map((paragraph: string, index: number) => (
+                            {asParagraphs((project as any).features[activeFeature].tech).map((paragraph: string, index: number) => (
                               <p key={index} className="text-lg md:text-xl text-gray-600 font-light leading-[2.05] tracking-wide">
                                 {paragraph}
                               </p>
@@ -1715,7 +1742,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                       />
                                   </button>
                                   <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-full">
-                                    {((project as any).features[activeFeature].designImageGrid as string[]).map((imageSrc, imageIndex) => (
+                                    {((project as any).features[activeFeature].designImageGrid as string[]).map((imageSrc: string, imageIndex: number) => (
                                       <button
                                         type="button"
                                         key={imageSrc}
@@ -1736,7 +1763,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                 </div>
                               ) : Array.isArray((project as any).features[activeFeature].designImageStack) ? (
                                 <div className="flex flex-col gap-2 md:gap-3">
-                                  {((project as any).features[activeFeature].designImageStack as string[]).map((imageSrc, imageIndex) => (
+                                  {((project as any).features[activeFeature].designImageStack as string[]).map((imageSrc: string, imageIndex: number) => (
                                     <button
                                       type="button"
                                       key={imageSrc}
@@ -1895,8 +1922,8 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                         </div>
 
                         <div className="space-y-10">
-                          <div>
-                            <h4 className="font-mono text-xs uppercase tracking-widest text-gray-400 mb-4">
+                        <div>
+                          <h4 className="font-mono text-xs uppercase tracking-widest text-gray-400 mb-4">
                               {feat.title === 'Bloom界面'
                                 ? '体验定位 EXPERIENCE'
                                 : feat.title === '记忆沉淀'
@@ -1906,11 +1933,17 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                   : feat.title === '个性化与长期使用'
                                     ? '拥有感 OWNERSHIP'
                                   : '关系主链 RELATIONSHIP FLOW'}
-                            </h4>
-                            <p className="text-lg text-gray-600 leading-relaxed font-light">{feat.gameplay}</p>
+                          </h4>
+                          <div className="space-y-4">
+                            {asParagraphs(feat.gameplay).map((paragraph: string, paragraphIndex: number) => (
+                              <p key={paragraphIndex} className="text-lg text-gray-600 leading-relaxed font-light">
+                                {paragraph}
+                              </p>
+                            ))}
                           </div>
+                        </div>
 
-                          <div>
+                        <div>
                             <h4 className="font-mono text-xs uppercase tracking-widest text-gray-400 mb-4">
                               {feat.title === 'Bloom界面'
                                 ? '设计表达 DESIGN APPROACH'
@@ -1923,9 +1956,15 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                 : feat.title === '关系体验'
                                   ? '提示词系统 PROMPT SYSTEM'
                                   : '技术实现 Technical Implementation'}
-                            </h4>
-                            <p className="text-base text-gray-500 leading-relaxed font-light">{feat.tech}</p>
+                          </h4>
+                          <div className="space-y-4">
+                            {asParagraphs(feat.tech).map((paragraph: string, paragraphIndex: number) => (
+                              <p key={paragraphIndex} className="text-base text-gray-500 leading-relaxed font-light">
+                                {paragraph}
+                              </p>
+                            ))}
                           </div>
+                        </div>
                         </div>
                       </motion.div>
                     )}
@@ -1983,7 +2022,13 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                   ? '设计表达 DESIGN APPROACH'
                                   : '策略拆解 (Strategy Breakdown)'}
                         </h4>
-                        <p className="text-lg text-gray-600 leading-relaxed font-light">{feat.tech}</p>
+                        <div className="space-y-4">
+                          {asParagraphs(feat.tech).map((paragraph: string, paragraphIndex: number) => (
+                            <p key={paragraphIndex} className="text-lg text-gray-600 leading-relaxed font-light">
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
                       </div>
                       <div>
                         <h4 className="font-mono text-xs uppercase tracking-widest text-gray-400 mb-3">
@@ -1997,7 +2042,13 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                                 ? '拥有感 OWNERSHIP'
                               : '关系主链 RELATIONSHIP FLOW'}
                         </h4>
-                        <p className="text-lg text-gray-600 leading-relaxed font-light">{feat.gameplay}</p>
+                        <div className="space-y-4">
+                          {asParagraphs(feat.gameplay).map((paragraph: string, paragraphIndex: number) => (
+                            <p key={paragraphIndex} className="text-lg text-gray-600 leading-relaxed font-light">
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -2147,7 +2198,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                 <div className="mb-6">
                   <h4 className="font-mono text-[10px] uppercase tracking-widest text-gray-400 mb-3">平台热度 Platform Heat</h4>
                   <div className="grid grid-cols-2 gap-3">
-                    {selectedChar.platforms.map((p: any, i: number) => (
+                    {selectedChar.platforms.map((p: HeatPlatform, i: number) => (
                       <div key={i} className="bg-white p-3 rounded-lg border border-black/5 shadow-sm">
                         <p className="text-[11px] font-sans font-medium text-gray-800 mb-0.5">{p.name}</p>
                         <p className="font-mono text-base text-black">{p.heat}</p>
@@ -2161,7 +2212,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
                 </p>
 
                 <div>
-                  <h4 className="font-mono text-[10px] uppercase tracking-widest text-gray-400 mb-3">浜虹墿浠嬬粛 Character Introduction</h4>
+                  <h4 className="font-mono text-[10px] uppercase tracking-widest text-gray-400 mb-3">人物介绍 Character Introduction</h4>
                   <div className="space-y-3">
                     <p className="text-sm text-gray-700 font-sans font-light leading-relaxed">
                       {selectedChar.intro}
@@ -2178,7 +2229,7 @@ const ProjectDetail: React.FC<{ project: any, onSelectProject: (id: string) => v
   );
 }
 
-const About: React.FC<{ setCursorVariant: any }> = ({ setCursorVariant }) => {
+const About: React.FC<{ setCursorVariant: CursorSetter }> = ({ setCursorVariant }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -2270,7 +2321,7 @@ const About: React.FC<{ setCursorVariant: any }> = ({ setCursorVariant }) => {
   );
 }
 
-const Footer: React.FC<{ setCursorVariant: any }> = ({ setCursorVariant }) => {
+const Footer: React.FC<{ setCursorVariant: CursorSetter }> = ({ setCursorVariant }) => {
   return (
     <footer className="bg-[#1A1A1A] text-white py-24">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-center">
