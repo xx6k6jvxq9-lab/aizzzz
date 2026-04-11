@@ -2343,7 +2343,7 @@ const Footer: React.FC<{ setCursorVariant: CursorSetter }> = ({ setCursorVariant
           </a>
           <div className="mt-4 flex items-center gap-3 text-lg text-white/80">
             <Phone size={18} strokeWidth={1.8} />
-            <span>15377208273</span>
+            <span>15377409273</span>
           </div>
         </div>
       </div>
