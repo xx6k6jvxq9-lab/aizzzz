@@ -36,7 +36,7 @@ const PROJECTS = [
     tech: ['Design', 'Code', 'AI'],
     description: '或许，我也可以成为一个创作者，把我脑子里天马行空的想法一一实现',
     videos: [
-      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: '/c1-web.mp4', poster: '/c1-poster.webp', platform: 'Local', views: '120万播放' },
+      { title: '中式梦核', titleEn: 'Chinese Dreamcore', url: '/c1-web.mp4?v=audio1', poster: '/c1-poster.webp', platform: 'Local', views: '120万播放' },
       { title: '美丽新世界', titleEn: 'Brave New World', url: '/c2-web.mp4', poster: '/c2-poster.webp', platform: 'Local', views: '85万播放' },
       { title: '玻璃山', titleEn: 'Glass Mountain', url: '/c3-web.mp4', poster: '/c3-poster.webp', platform: 'Local', views: '42万播放' },
       { title: '一觉醒来全球降智', titleEn: 'Global IQ Drop Overnight', url: '/c4-web.mp4', poster: '/c4-poster.webp', platform: 'Local', views: '210万播放' }
